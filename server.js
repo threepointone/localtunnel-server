@@ -7,6 +7,8 @@ import http_proxy from 'http-proxy';
 import http from 'http';
 import Promise from 'bluebird';
 
+tldjs.validHosts = ['localhost'];
+
 import Proxy from './proxy';
 import rand_id from './lib/rand_id';
 import BindingAgent from './lib/BindingAgent';
@@ -42,7 +44,11 @@ const stats = {
 // will wait for a tunnel socket to become available
 function maybe_bounce(req, res, sock, head) {
     // without a hostname, we won't know who the request is for
-    const hostname = req.headers.host;
+    if(req.query && req.query['new']){
+        console.log('new!!!')
+        return false
+    }
+    const hostname = req.headers.host;    
     if (!hostname) {
         return false;
     }
